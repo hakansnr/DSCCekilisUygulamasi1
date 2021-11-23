@@ -1,0 +1,52 @@
+package com.example.dsccekilisuygulamasi
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
+import com.example.dsccekilisuygulamasi.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+
+    lateinit var binding: ActivityMainBinding
+    var participantList = mutableListOf<Participant>()
+    var winnerParticipant = Participant("", "")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.RollTheWinnerButton.setOnClickListener { RollTheWinner() }
+        binding.AddParticimantButton.setOnClickListener { AddParticipantToList() }
+
+    }
+
+    fun AddParticipantToList() {
+        var FullNameString = binding.FullNameEditText.text.toString()
+        var DSCNameString = binding.DSCNameEditText.text.toString()
+
+        if (TextUtils.isEmpty(FullNameString) || TextUtils.isEmpty(DSCNameString)) {
+            binding.InfoText.text = "Enter more information."
+        } else {
+            val participant = Participant(FullNameString, DSCNameString)
+            participantList.add(participant)
+            binding.InfoText.text = "${participant.FullName} added to list"
+        }
+        binding.FullNameEditText.text.clear()
+        binding.DSCNameEditText.text.clear()
+    }
+
+    fun RollTheWinner() {
+
+        if (participantList.count() == 0) {
+            binding.InfoText.text = "Add more participant before rolling."
+        } else {
+            winnerParticipant = participantList.random()
+            binding.WinnerFullNameText.text = winnerParticipant.FullName
+            binding.WinnerDSCNameText.text = winnerParticipant.DSCName
+        }
+    }
+}
+    class Participant(val FullName: String, val DSCName: String) {  }
+
+//Erü-HakanSnr//
